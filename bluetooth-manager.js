@@ -9,14 +9,17 @@ export default (connectionManager) => {
   };
 
   function onConnect(params) {
+    console.log("hmmm");
     const deviceAddress = params.remoteAddress;
 
     // Source: reading from the remote device
     // Sink: writing to the remote device
     const duplexStream = {
       source: Pushable(),
-      sink: pull.drain((data) => BluetoothSerial.writewriteToDevice(deviceAddress, data))
+      sink: pull.drain((data) => BluetoothSerial.writeToDevice(deviceAddress, btoa(data)))
     }
+
+    console.log("hm2");
 
     connections[deviceAddress] = duplexStream;
 
@@ -63,10 +66,11 @@ export default (connectionManager) => {
 
     const duplexStream = connections[deviceAddress];
 
+    console.log("Looking for address in address map");
     if (duplexStream) {
       duplexStream.source.push(data);
     } else {
-      throw new Error("Unexpectedly didn't find address in device map.")
+      console.log("Unexpectedly didn't find address in device map.")
     }
 
     console.log("ssb-bluetooth-manager: " + deviceAddress + " data read: " + data);
