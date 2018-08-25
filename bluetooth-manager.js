@@ -9,7 +9,6 @@ export default (connectionManager) => {
   };
 
   function onConnect(params) {
-    console.log("hmmm");
     const deviceAddress = params.remoteAddress;
 
     // Source: reading from the remote device
@@ -19,11 +18,7 @@ export default (connectionManager) => {
       sink: pull.drain((data) => BluetoothSerial.writeToDevice(deviceAddress, btoa(data)))
     }
 
-    console.log("hm2");
-
     connections[deviceAddress] = duplexStream;
-
-    console.log("Incoming: " + deviceAddress);
 
     // Hand the new connection to the connection manager which will read from and write
     // to the duplex stream until it is indicated the stream has ended when 'end' is called
@@ -38,11 +33,8 @@ export default (connectionManager) => {
 
     if (duplexStream) {
       duplexStream.source.end();
-
       delete connections[deviceAddress];
     }
-
-    console.log("ssb-bluetooth-manager: " + deviceAddress + " connect failed");
 
   }
 
@@ -53,11 +45,8 @@ export default (connectionManager) => {
 
     if (duplexStream) {
       duplexStream.source.end();
-
       delete connections[deviceAddress];
     }
-
-    console.log("ssb-bluetooth-manager: " + deviceAddress + " connection lost");
   }
 
   function onDataRead(params) {
@@ -66,14 +55,12 @@ export default (connectionManager) => {
 
     const duplexStream = connections[deviceAddress];
 
-    console.log("Looking for address in address map");
     if (duplexStream) {
       duplexStream.source.push(data);
     } else {
       console.log("Unexpectedly didn't find address in device map.")
     }
 
-    console.log("ssb-bluetooth-manager: " + deviceAddress + " data read: " + data);
   }
 
   function setupEventListeners() {
