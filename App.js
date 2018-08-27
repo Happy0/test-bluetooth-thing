@@ -10,9 +10,12 @@ export default class App extends React.Component {
   componentDidMount() {
 
     var connectionManager = {
-      onNewConnection: function (duplexStream) {
+      onNewConnection: function (duplexStream, connectionDetails) {
 
           var testValues = [...Array(100).keys()].map(num => "msg" + num);
+
+          console.log("Connection details");
+          console.log(connectionDetails);
 
          // Test that we can write to the stream and that they're received in order
          pull( pull.values(testValues) , duplexStream.sink);

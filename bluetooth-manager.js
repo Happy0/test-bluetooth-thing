@@ -20,10 +20,19 @@ export default (connectionManager) => {
 
     connections[deviceAddress] = duplexStream;
 
+    /**
+     * Details about the connection: the remote bluetooth address, and whether
+     * the connection was incoming or outgoing.
+     */
+    var connectionDetails = {
+      remoteAddress: deviceAddress,
+      isIncoming: params.isIncoming
+    }
+
     // Hand the new connection to the connection manager which will read from and write
     // to the duplex stream until it is indicated the stream has ended when 'end' is called
     // on the source
-    connectionManager.onNewConnection(duplexStream);
+    connectionManager.onNewConnection(duplexStream, connectionDetails);
   }
 
   function onConnectionFailed(params) {
