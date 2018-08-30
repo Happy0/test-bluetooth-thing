@@ -4,6 +4,8 @@ import BluetoothSerial from 'react-native-bluetooth-serial'
 
 export default (connectionManager) => {
 
+  const serviceUUID = "b0b2e90d-0cda-4bb0-8e4b-fb165cd17d48";
+
   const connections = {
 
   };
@@ -80,16 +82,33 @@ export default (connectionManager) => {
   }
 
   function start() {
-
     setupEventListeners();
+  }
 
+  function listenForIncomingConnections() {
     BluetoothSerial.listenForIncomingConnections(
-      "scuttlebutt", "b0b2e90d-0cda-4bb0-8e4b-fb165cd17d48"
+      "scuttlebutt", serviceUUID
     ).then(() => BluetoothSerial.makeDeviceDiscoverable(120));
   }
 
+  function discoverUnpairedDevices() {
+    return BluetoothSerial.discoverUnpairedDevices();
+  }
+
+  function listPairedDevices() {
+    return BluetoothSerial.list();
+  }
+
+  function connect(address) {
+    BluetoothSerial.connect(address, "b0b2e90d-0cda-4bb0-8e4b-fb165cd17d48");
+  }
+
   return {
-    start
+    start,
+    discoverUnpairedDevices,
+    listenForIncomingConnections,
+    listPairedDevices,
+    connect
   }
 
 }
