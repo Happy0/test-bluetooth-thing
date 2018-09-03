@@ -88,7 +88,11 @@ export default (connectionManager) => {
   function listenForIncomingConnections() {
     BluetoothSerial.listenForIncomingConnections(
       "scuttlebutt", serviceUUID
-    ).then(() => BluetoothSerial.makeDeviceDiscoverable(120));
+    );
+  }
+
+  function makeDeviceDiscoverable() {
+    BluetoothSerial.makeDeviceDiscoverable(120);
   }
 
   function discoverUnpairedDevices() {
@@ -105,6 +109,7 @@ export default (connectionManager) => {
 
   return {
     start,
+    makeDeviceDiscoverable,
     discoverUnpairedDevices,
     listenForIncomingConnections,
     listPairedDevices,

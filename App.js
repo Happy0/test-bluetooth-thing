@@ -46,7 +46,7 @@ export default class App extends React.Component {
     this.bluetoothManager.start();
     this.bluetoothManager.listenForIncomingConnections();
 
-    this.searchUnpairedDevices(this.bluetoothManager);
+  //  this.searchUnpairedDevices(this.bluetoothManager);
 
     this.bluetoothManager.listPairedDevices().then(paired => {
       this.setState({
@@ -77,6 +77,7 @@ export default class App extends React.Component {
   renderContent() {
     var unpairedDevices = this.state.unpairedDevices;
     var pairedDevices = this.state.pairedDevices;
+    var bluetoothManager = this.bluetoothManager;
 
     if (unpairedDevices.length === 0 && pairedDevices.length === 0 ) {
       return this.renderSearching();
@@ -88,6 +89,8 @@ export default class App extends React.Component {
 
           <Text> Paired </Text>
           { pairedDevices.map(info => this.renderDeviceInfo(this.bluetoothManager, info)) }
+
+          <Button onPress={() => bluetoothManager.makeDeviceDiscoverable(120)} title="Make discoverable"/>
         </View>
       );
     }
